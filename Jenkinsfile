@@ -21,8 +21,8 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject() {
-              echo "Build Appliction Image: frontweb"
-              def bc = openshift.selector("bc", "frontweb")
+              echo "Build Appliction Image: finder"
+              def bc = openshift.selector("bc", "finder")
               bc.startBuild().logs("-f")
               def bb = bc.narrow("bc").related("builds")
               timeout(10) {
@@ -40,8 +40,8 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject() {
-              echo "Create Tag Image: frontweb"
-              openshift.tag("frontweb:1.0")
+              echo "Create Tag Image: finder"
+              openshift.tag("finder:1.0")
             }
           }
         }
