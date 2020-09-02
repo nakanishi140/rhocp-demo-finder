@@ -22,7 +22,7 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject() {
               echo "Build Appliction Image: finder"
-              def bc = openshift.selector("bc", "finder")
+              def bc = openshift.selector("bc", "finder-v10")
               bc.startBuild().logs("-f")
               def bb = bc.narrow("bc").related("builds")
               timeout(10) {
@@ -35,13 +35,14 @@ pipeline {
         }
       }
     }
-    stage("create tag") {
+    stage('deploy') {
       steps {
         script {
           openshift.withCluster() {
             openshift.withProject() {
-              echo "Create Tag Image: finder"
-              openshift.tag("finder:1.0")
+              sh "oc rollout restart deployment/finder-v10"
+                timeout(10) {
+              }
             }
           }
         }
